@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  user
+  admin
+  superadmin
+}
+
+enum PaymentStatus {
+  pending
+  paid
+}
+
+enum Status {
+  pending
+  approved
+  rejected
+}
+
+model User {
+  id                  String               @id @default(cuid())
+  name                String?
+  email               String               @unique
+  password            String
+  mobile              String?
+  role                UserRole             @default(user)
+  emailVerified       DateTime?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  bookings            Booking[]
+  resetPasswordTokens ResetPasswordToken[]
+}
+
+model Trip {
+  id          String    @id @default(cuid())
+  destination String
+  country     String
+  description String
+  highlights  String
+  price       Float
+  startDate   DateTime
+  endDate     DateTime
+  imageUrl    String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+}
+
+model Booking {
+  id            Int           @id @default(autoincrement())
+  userId        String
+  tripId        String
+  bookedAt      DateTime      @default(now())
+  status        Status        @default(pending)
+  paymentStatus PaymentStatus @default(pending)
+  bookingDate   DateTime?
+  user          User          @relation(fields: [userId], references: [id])
+  trip          Trip          @relation(fields: [tripId], references: [id])
+}
+
+model Media {
+  id            String       @id @default(cuid())
+  title         String
+  description   String?
+  type          MediaType
+  url           String
+  publicId      String? // Add this optional field
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  destination   Destination? @relation(fields: [destinationId], references: [id])
+  destinationId String?
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  REEL
+}
+
+model Destination {
+  id          String  @id @default(cuid())
+  name        String  @unique
+  location    String
+  description String?
+  medias      Media[]
+}
+
+model ResetPasswordToken {
+  id        String   @id @default(uuid())
+  token     String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+}
