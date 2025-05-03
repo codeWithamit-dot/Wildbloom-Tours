@@ -122,7 +122,7 @@ export default function UserDashboard() {
     try {
       await createBooking(tripId);
       toast.success("Booking created successfully! Awaiting approval and payment.");
-      setIsBookingDialogOpen(true); // Show popup after successful booking
+      setIsBookingDialogOpen(true);
       setActiveTab("bookings");
       fetchData();
     } catch (err: unknown) {
@@ -149,16 +149,15 @@ export default function UserDashboard() {
 
   return (
     <div className="p-4 md:p-8 space-y-8 bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen font-sans">
-      
       {/* Logout Button - Top right corner */}
       <motion.div 
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="absolute top-4 right-4"
+        className="absolute top-4 right-4 flex items-center"
       >
         <Button
           variant="ghost"
-          className="text-gray-700 hover:text-red-600 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 rounded-full p-2 transition duration-200"
+          className="text-gray-700 hover:text-red-600 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 rounded-full px-3 py-1 transition duration-200"
           onClick={() => signOut({ callbackUrl: "/" })}
         >
           <span className="text-sm font-medium">Logout</span>
