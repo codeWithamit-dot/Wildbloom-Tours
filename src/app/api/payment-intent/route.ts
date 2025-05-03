@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from '../../../lib/authOptions'
 import { prisma } from "../../../lib/prisma";
 import { stripe } from "../../../lib/stripe";
 import { Booking } from "../../../types/api/booking"
@@ -25,10 +25,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: false, error: "Invalid bookingId" }, { status: 400 });
     }
 
-    const booking = await prisma.booking.findUnique({
+    const prismaBooking = await prisma.booking.findUnique({
       where: { id: bookingIdInt },
       include: { trip: true },
-    }) as Booking | null;
+    });
+
+    const booking: Booking | null = prismaBooking
+      ? {
+          ...prismaBooking,
+          bookedAt: prismaBooking.bookedAt.toISOString(),
+          bookingDate: prismaBooking.bookingDate ? prismaBooking.bookingDate.toISOString() : null,
+          trip: {
+            ...prismaBooking.trip,
+            startDate: prismaBooking.trip.startDate.toISOString(),
+            endDate: prismaBooking.trip.endDate.toISOString(),
+          },
+        }
+      : null;
 
     if (!booking) {
       return NextResponse.json({ success: false, error: "Booking not found" }, { status: 404 });

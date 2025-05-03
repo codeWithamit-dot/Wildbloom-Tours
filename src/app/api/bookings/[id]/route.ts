@@ -1,20 +1,26 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
+import { authOptions } from "../../../../lib/authOptions";
 import { prisma } from "../../../../lib/prisma";
 
-// GET a booking by ID
-export async function GET(req: Request, { params }: { params: { id: string } }) {
-  try {
-    const { id } = params;
+const validateBookingId = (id: string) => {
+  const bookingIdInt = parseInt(id);
+  if (isNaN(bookingIdInt)) {
+    return { valid: false, error: "Invalid booking ID" };
+  }
+  return { valid: true, bookingIdInt };
+};
 
+export async function GET(request: NextRequest) {
+  try {
+    const id = request.nextUrl.pathname.split("/").pop() || "";
     if (!id) {
       return NextResponse.json({ success: false, error: "Missing booking ID" }, { status: 400 });
     }
 
-    const bookingIdInt = parseInt(id);
-    if (isNaN(bookingIdInt)) {
-      return NextResponse.json({ success: false, error: "Invalid booking ID" }, { status: 400 });
+    const { valid, bookingIdInt, error } = validateBookingId(id);
+    if (!valid) {
+      return NextResponse.json({ success: false, error }, { status: 400 });
     }
 
     const booking = await prisma.booking.findUnique({
@@ -36,25 +42,23 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
   }
 }
 
-// PATCH to update booking
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-
     if (!session || !session.user) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id } = params;
-    const { paymentStatus } = await req.json();
+    const id = request.nextUrl.pathname.split("/").pop() || "";
+    const { paymentStatus } = await request.json();
 
     if (!id) {
       return NextResponse.json({ success: false, error: "Missing booking ID" }, { status: 400 });
     }
 
-    const bookingIdInt = parseInt(id);
-    if (isNaN(bookingIdInt)) {
-      return NextResponse.json({ success: false, error: "Invalid booking ID" }, { status: 400 });
+    const { valid, bookingIdInt, error } = validateBookingId(id);
+    if (!valid) {
+      return NextResponse.json({ success: false, error }, { status: 400 });
     }
 
     if (!paymentStatus || !["pending", "paid"].includes(paymentStatus)) {
@@ -88,29 +92,27 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   }
 }
 
-// PUT to update booking status (admin only)
-export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PUT(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     if (!session || !session.user || session.user.role !== "admin") {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const { id } = await params;
+    const id = request.nextUrl.pathname.split("/").pop() || "";
+    const { status } = await request.json();
+
     if (!id) {
       return NextResponse.json({ success: false, error: "Missing booking ID" }, { status: 400 });
     }
-
-    const body = await req.json();
-    const { status } = body;
 
     if (!status || !["pending", "approved", "rejected"].includes(status)) {
       return NextResponse.json({ success: false, error: "Invalid status" }, { status: 400 });
     }
 
-    const bookingIdInt = parseInt(id);
-    if (isNaN(bookingIdInt)) {
-      return NextResponse.json({ success: false, error: "Invalid booking ID" }, { status: 400 });
+    const { valid, bookingIdInt, error } = validateBookingId(id);
+    if (!valid) {
+      return NextResponse.json({ success: false, error }, { status: 400 });
     }
 
     const booking = await prisma.booking.findUnique({
@@ -139,3 +141,4 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     );
   }
 }
+export const dynamic = "force-dynamic";

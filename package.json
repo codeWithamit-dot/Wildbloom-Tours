@@ -31,7 +31,7 @@
     "bcrypt": "^5.1.1",
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",
-    "clinic": "^13.0.0",
+    "clinic": "^9.1.0",
     "cloudinary": "^2.6.0",
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
@@ -60,9 +60,11 @@
     "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/lodash": "^4.17.16",
-    "@types/node": "^20",
+    "@types/next": "^9.0.0",
+    "@types/next-auth": "^3.15.0",
+    "@types/node": "^22.15.3",
     "@types/nodemailer": "^6.4.17",
-    "@types/react": "^18",
+    "@types/react": "^18.3.20",
     "@types/react-dom": "^18",
     "autoprefixer": "^10.4.21",
     "dotenv-cli": "^7.4.4",
@@ -74,8 +76,22 @@
     "prisma": "^6.7.0",
     "tailwindcss": "^4.1.4",
     "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
     "tw-animate-css": "^1.2.8",
-    "typescript": "^5",
+    "typescript": "^5.8.3",
     "typescript-eslint": "^8.31.0"
-  }
+  },
+  "description": "This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeWithamit-dot/Wildbloom-Tours.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codeWithamit-dot/Wildbloom-Tours/issues"
+  },
+  "homepage": "https://github.com/codeWithamit-dot/Wildbloom-Tours#readme"
 }

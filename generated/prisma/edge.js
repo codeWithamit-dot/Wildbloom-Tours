@@ -211,7 +211,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "E:\\travel-agency\\generated\\prisma",
+      "value": "C:\\travel-agency\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -225,7 +225,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "E:\\travel-agency\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\travel-agency\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {

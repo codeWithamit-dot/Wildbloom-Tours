@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "../../../../components/ui/card";
 import { Skeleton } from "../../../../components/ui/skeleton";
 import { ImageIcon, VideoIcon, Clapperboard, MapPin } from "lucide-react";
+import Image from "next/image";
 
 interface Media {
   id: string;
@@ -53,7 +54,10 @@ export default function UserMediaPage() {
       <div className="p-6 max-w-7xl mx-auto bg-gray-900 min-h-screen">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, index) => (
-            <Card key={index} className="overflow-hidden bg-gray-800 border-gray-700">
+            <Card
+              key={index}
+              className="overflow-hidden bg-gray-800 border-gray-700"
+            >
               <Skeleton className="h-48 w-full rounded-t-lg bg-gray-700" />
               <CardContent className="p-4 space-y-2">
                 <Skeleton className="h-6 w-3/4 bg-gray-700" />
@@ -84,7 +88,7 @@ export default function UserMediaPage() {
 
   return (
     <div className="p-4 md:p-8 max-w-7xl mx-auto bg-gray-900 min-h-screen">
-      <motion.h1 
+      <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-3xl md:text-4xl font-bold text-white mb-8 text-center"
@@ -99,7 +103,7 @@ export default function UserMediaPage() {
           const reels = destination.medias.filter((m) => m.type === "REEL");
 
           return (
-            <motion.div 
+            <motion.div
               key={destination.id}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -107,7 +111,7 @@ export default function UserMediaPage() {
               className="mb-16 last:mb-0"
             >
               <div className="mb-6">
-                <motion.h2 
+                <motion.h2
                   className="text-2xl font-bold mb-2 flex items-center text-white"
                   whileHover={{ x: 5 }}
                 >
@@ -115,17 +119,21 @@ export default function UserMediaPage() {
                   {destination.name}
                 </motion.h2>
                 <p className="text-gray-400 mb-4 max-w-3xl">
-                  {destination.description || "Explore the beauty of this destination through our media collection."}
+                  {destination.description ||
+                    "Explore the beauty of this destination through our media collection."}
                 </p>
                 <div className="flex items-center text-sm text-gray-500 mb-6">
                   <span className="mr-4 flex items-center">
-                    <ImageIcon className="mr-1 text-emerald-400" size={16} /> {images.length} images
+                    <ImageIcon className="mr-1 text-emerald-400" size={16} />{" "}
+                    {images.length} images
                   </span>
                   <span className="mr-4 flex items-center">
-                    <VideoIcon className="mr-1 text-emerald-400" size={16} /> {videos.length} videos
+                    <VideoIcon className="mr-1 text-emerald-400" size={16} />{" "}
+                    {videos.length} videos
                   </span>
                   <span className="flex items-center">
-                    <Clapperboard className="mr-1 text-emerald-400" size={16} /> {reels.length} reels
+                    <Clapperboard className="mr-1 text-emerald-400" size={16} />{" "}
+                    {reels.length} reels
                   </span>
                 </div>
               </div>
@@ -133,7 +141,7 @@ export default function UserMediaPage() {
               {/* Images Section */}
               {images.length > 0 && (
                 <section className="mb-10">
-                  <motion.h3 
+                  <motion.h3
                     className="text-xl font-semibold mb-4 flex items-center text-white"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -149,20 +157,28 @@ export default function UserMediaPage() {
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         whileHover={{ scale: 1.02, zIndex: 10 }}
-                        transition={{ type: "spring", stiffness: 400, damping: 20 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 400,
+                          damping: 20,
+                        }}
                         className="relative group"
                       >
                         <Card className="overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300 h-full bg-gray-800 border-gray-700">
                           <CardContent className="p-0">
                             <div className="relative aspect-square overflow-hidden">
-                              <img
+                              <Image
                                 src={media.url}
                                 alt={media.title}
-                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                layout="fill"
+                                objectFit="cover"
+                                className="transition-transform duration-500 group-hover:scale-105"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                                 <div>
-                                  <h4 className="text-white font-medium">{media.title}</h4>
+                                  <h4 className="text-white font-medium">
+                                    {media.title}
+                                  </h4>
                                   {media.description && (
                                     <p className="text-gray-300 text-sm mt-1 line-clamp-2">
                                       {media.description}
@@ -182,7 +198,7 @@ export default function UserMediaPage() {
               {/* Videos Section */}
               {videos.length > 0 && (
                 <section className="mb-10">
-                  <motion.h3 
+                  <motion.h3
                     className="text-xl font-semibold mb-4 flex items-center text-white"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -206,13 +222,15 @@ export default function UserMediaPage() {
                               <video
                                 controls
                                 className="w-full aspect-video"
-                                poster={media.url.replace('.mp4', '.jpg')}
+                                poster={media.url.replace(".mp4", ".jpg")}
                               >
                                 <source src={media.url} type="video/mp4" />
                               </video>
                             </div>
                             <div className="p-4">
-                              <h4 className="font-medium text-white">{media.title}</h4>
+                              <h4 className="font-medium text-white">
+                                {media.title}
+                              </h4>
                               {media.description && (
                                 <p className="text-gray-400 text-sm mt-1">
                                   {media.description}
@@ -230,7 +248,7 @@ export default function UserMediaPage() {
               {/* Reels Section */}
               {reels.length > 0 && (
                 <section className="mb-10">
-                  <motion.h3 
+                  <motion.h3
                     className="text-xl font-semibold mb-4 flex items-center text-white"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
@@ -261,7 +279,9 @@ export default function UserMediaPage() {
                               </video>
                             </div>
                             <div className="p-4">
-                              <h4 className="font-medium text-white">{media.title}</h4>
+                              <h4 className="font-medium text-white">
+                                {media.title}
+                              </h4>
                               {media.description && (
                                 <p className="text-gray-400 text-sm mt-1">
                                   {media.description}

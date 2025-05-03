@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+import { authOptions } from "../../../lib/authOptions";
 import { prisma } from "../../../lib/prisma";
 
 // GET all bookings (admin: all, user: own)
@@ -8,12 +8,14 @@ export async function GET() {
   try {
     const session = await getServerSession(authOptions);
 
-    if (!session) {
+    if (!session || !session.user) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
+    const isAdmin = session.user.role === "admin";
+
     const bookings = await prisma.booking.findMany({
-      where: session.user.role !== "admin" ? { userId: session.user.id } : {},
+      where: isAdmin ? {} : { userId: session.user.id },
       include: {
         user: {
           select: {
@@ -29,10 +31,7 @@ export async function GET() {
       },
     });
 
-    return NextResponse.json({
-      success: true,
-      data: bookings,
-    });
+    return NextResponse.json({ success: true, data: bookings });
   } catch (error) {
     console.error("[BOOKINGS_GET_ERROR]", error);
     return NextResponse.json(
@@ -43,7 +42,7 @@ export async function GET() {
 }
 
 // POST to create a new booking
-export async function POST(req: NextRequest) {
+export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
 
@@ -51,7 +50,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const { tripId } = await req.json();
+    const { tripId } = await request.json();
+
     if (!tripId) {
       return NextResponse.json({ success: false, error: "Missing tripId" }, { status: 400 });
     }
@@ -59,6 +59,7 @@ export async function POST(req: NextRequest) {
     const trip = await prisma.trip.findUnique({
       where: { id: tripId },
     });
+
     if (!trip) {
       return NextResponse.json({ success: false, error: "Trip not found" }, { status: 404 });
     }
@@ -96,3 +97,5 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+export const dynamic = "force-dynamic";

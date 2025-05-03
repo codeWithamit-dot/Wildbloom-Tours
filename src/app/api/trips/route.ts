@@ -51,7 +51,16 @@ export async function POST(request: Request) {
     }
 
     const newTrip = await prisma.trip.create({
-      data: validation.data,
+      data: {
+        destination: formattedData.destination!,
+        country: formattedData.country!,
+        description: formattedData.description!,
+        highlights: formattedData.highlights!,
+        price: formattedData.price!,
+        startDate: formattedData.startDate!,
+        endDate: formattedData.endDate!,
+        imageUrl: formattedData.imageUrl!,
+      },
     });
 
     return NextResponse.json(newTrip);
