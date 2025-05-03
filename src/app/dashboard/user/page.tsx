@@ -153,14 +153,14 @@ export default function UserDashboard() {
       <motion.div 
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="absolute top-4 right-4 flex items-center"
+        className="absolute top-2 right-2 flex items-center z-10"
       >
         <Button
           variant="ghost"
-          className="text-gray-700 hover:text-red-600 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 rounded-full px-3 py-1 transition duration-200"
+          className="text-gray-700 hover:text-red-600 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 rounded-full px-2 py-1 text-sm font-medium transition duration-200"
           onClick={() => signOut({ callbackUrl: "/" })}
         >
-          <span className="text-sm font-medium">Logout</span>
+          Logout
         </Button>
       </motion.div>
 
