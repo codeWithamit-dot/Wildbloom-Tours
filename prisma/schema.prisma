@@ -8,23 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  user
-  admin
-  superadmin
-}
-
-enum PaymentStatus {
-  pending
-  paid
-}
-
-enum Status {
-  pending
-  approved
-  rejected
-}
-
 model User {
   id                  String               @id @default(cuid())
   name                String?
@@ -62,8 +45,8 @@ model Booking {
   status        Status        @default(pending)
   paymentStatus PaymentStatus @default(pending)
   bookingDate   DateTime?
-  user          User          @relation(fields: [userId], references: [id])
   trip          Trip          @relation(fields: [tripId], references: [id])
+  user          User          @relation(fields: [userId], references: [id])
 }
 
 model Media {
@@ -72,17 +55,11 @@ model Media {
   description   String?
   type          MediaType
   url           String
-  publicId      String? // Add this optional field
+  publicId      String?
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt
-  destination   Destination? @relation(fields: [destinationId], references: [id])
   destinationId String?
-}
-
-enum MediaType {
-  IMAGE
-  VIDEO
-  REEL
+  destination   Destination? @relation(fields: [destinationId], references: [id])
 }
 
 model Destination {
@@ -97,7 +74,30 @@ model ResetPasswordToken {
   id        String   @id @default(uuid())
   token     String
   userId    String
-  user      User     @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   expiresAt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum UserRole {
+  user
+  admin
+  superadmin
+}
+
+enum PaymentStatus {
+  pending
+  paid
+}
+
+enum Status {
+  pending
+  approved
+  rejected
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  REEL
 }
