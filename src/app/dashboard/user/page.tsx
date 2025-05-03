@@ -39,7 +39,6 @@ import {
   DialogDescription,
 } from "../../../components/ui/dialog";
 import { cn, fetchTrips, fetchUserBookings } from "../../../lib/utils";
-import { signOut } from "next-auth/react";
 
 interface AppError extends Error {
   message: string;
@@ -149,21 +148,6 @@ export default function UserDashboard() {
 
   return (
     <div className="p-4 md:p-8 space-y-8 bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen font-sans">
-      {/* Logout Button - Top right corner */}
-      <motion.div 
-        initial={{ opacity: 0, x: 20 }}
-        animate={{ opacity: 1, x: 0 }}
-        className="absolute top-2 right-2 flex items-center z-10"
-      >
-        <Button
-          variant="ghost"
-          className="text-gray-700 hover:text-red-600 focus:ring-2 focus:ring-red-500 focus:ring-opacity-50 rounded-full px-2 py-1 text-sm font-medium transition duration-200"
-          onClick={() => signOut({ callbackUrl: "/" })}
-        >
-          Logout
-        </Button>
-      </motion.div>
-
       {/* Welcome Message */}
       {session?.user?.name && (
         <motion.div
