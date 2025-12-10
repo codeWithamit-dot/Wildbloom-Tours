@@ -212,7 +212,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\travel-agency\\generated\\prisma",
+      "value": "C:\\Users\\user\\Wildbloom-Tours\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -226,12 +226,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\travel-agency\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Users\\user\\Wildbloom-Tours\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": null,
-    "schemaEnvPath": "../../.env"
+    "rootEnvPath": null
   },
   "relativePath": "../../prisma",
   "clientVersion": "6.7.0",
@@ -240,11 +239,12 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "postgresql://travel_agency_db_owner:npg_NFi3vCIRD0eu@ep-shiny-math-a4rxj15r-pooler.us-east-1.aws.neon.tech/travel_agency_db?sslmode=require"
+        "value": null
       }
     }
   },
